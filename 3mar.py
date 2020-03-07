@@ -38,7 +38,7 @@ for m in range(1, 20):
     dic[m] = false_neig
     print(false_neig)
 
-G = list(dic.items())
-x, y = zip(*G)
-plt.plot(x, y)
-plt.show()
+#G = list(dic.items())
+#x, y = zip(*G)
+#plt.plot(x, y)
+#plt.show()
