@@ -7,10 +7,10 @@ X = pd.read_csv('usd_kzt.csv', encoding = 'UTF-8', delimiter = ',')
 X = X.drop(['USD_quant'], axis = 1)
 Date = X['Date'].values
 USD = X['USD'].values
-# Обучение на 1 месяце
-r = 30
+
 N = len(USD)
-tau = (N + 1) // 8
+tau = 46
+r = 10
 
 full = [USD[i: N - tau + i] for i in range(tau)]
 full = np.array(full)
@@ -28,5 +28,5 @@ prediction = np.hstack((new_X[0][:tau], new_X[r - 1]))
 plt.plot(Date, real, 'b')
 plt.plot(Date, prediction, 'r' )
 plt.xlabel('Date')
-plt.ylabel('Tenge')
+plt.ylabel('KZT')
 plt.show()
