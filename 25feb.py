@@ -1,50 +1,41 @@
-from math import *
+from math import sqrt
+from math import sin
+from math import cos
+from math import log
 
-t = 100 #10, 100, 1000
+t = 100
 N = 1000
+l = 0.5
+k = 30
+ck = 1e+9
 a, b = 1, 1
 
-x = [cos(j/t) for j in range(N*t+1)]
-y = [sin(j/t) for j in range(N*t+1)]
-# x = [a * cos(j/t) for j in range(N*t+1)]
-# y = [b * sin(j/t) for j in range(N*t+1)]
+x = [cos(j/t) for j in range(N+1)]
+y = [sin(j/t) for j in range(N+1)]
 
-def func_x(a, t):
-    return a * cos(t)
-def func_y(b, t):
-    return b * sin(t)
-def teta(z):
-    return (0 if z < 0 else 1)
 def euc_dist(x1, y1, x2, y2):
     return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
 
-def dist(k, n1, n2):
+def dist(x1, y1, x2, y2, k):
     ans = 0.0
-    for i in range(1, k+1):
-        index1 = n1 - k - i
-        index2 = n2 - k - i
-        if index1 < 0 or index2 < 0:
-            break
-        cur_euc_dist = euc_dist(x[index1], y[index1], x[index2], y[index2])
-        ans += cur_euc_dist * cur_euc_dist
-    return sqrt(ans)
+    for i in range(k):
+        ans += euc_dist(x1[i], y1[i], x2[i], y2[i])
+    return ans
 
 def c_k_l(k, l):
+    sqr_l = l*l
     ans = 0.0
-    for i in range(1, N+1):
-        for j in range(1, N+1):
-            ans += teta(l - dist(k, i, j))
+    for i in range(N-k):
+        for j in range(N-k):
+            ans += 2*(sqr_l >= dist(x[i:i+k], y[i:i+k], x[j:j+k], y[j:j+k], k))
     return ans / (N*N)
 
-k = 10
-prev = log(c_k_l(k, 0.5)) / log(0.5)
-print(prev)
-cur = log(c_k_l(k, 0.25)) / log(0.25)
-print(cur)
-step = 8
-while step > 0.001 and abs(prev-cur) > 0.05:
-    prev = cur
-    l = 1.0 / step
-    cur = log(c_k_l(k, l)) / log(l)
-    print(cur)
-    step *= 2
+for cur_k in range(1, k):
+    ckl = c_k_l(cur_k, l)
+    dc = log(ckl) / log(l)
+    print('ckl\t', ckl)
+    if abs(ck - dc) <= 0.05:
+        print('Answer:\t', ckl, dc, cur_k)
+        exit()
+    else:
+        ck = dc
