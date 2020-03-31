@@ -30,7 +30,7 @@ Lambda, V = np.linalg.eig(C)
 Y = V.T.dot(X)
 
 # 5. SSA–сглаживание
-r = 366
+r = 20
 V_r = V[:,:r]
 Y_r = V.T.dot(X)[:r,]
 new_X = V_r.dot(Y_r)
@@ -71,5 +71,12 @@ denom = V_tau @ V_ast.T
 delim = 1 - V_tau @ V_tau.T
 predict_series = (denom.dot(Q)) / delim
 
-Draw(usd_series, 'r', 'Days', 'KZT')
-Draw(predict_series, 'b', 'Days', 'KZT')
+predict_series = np.append(usd_series[:N-n], predict_series)
+
+plt.plot(usd_series, 'b')
+plt.plot(predict_series, 'r')
+plt.xlabel('Days')
+plt.ylabel('KZT')
+plt.show()
+# Draw(usd_series, 'r', 'Days', 'KZT')
+# Draw(predict_series, 'b', 'Days', 'KZT')
